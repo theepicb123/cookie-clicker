@@ -220,7 +220,7 @@ function onFrame(event) {
     timer = timer + 1;
     if (timer === 60) {
         timer = 0;
-        autoPower = (autoUpgrade1 * (2 - Math.pow(2, autoUpgradeRank))) * (2 - Math.pow(2, autoUpgradeOtherRank)) + (((autoUpgrade2 * 2) * (2 - Math.pow(2, autoUpgradeRank2))));
+        autoPower = (autoUpgrade1 * (Math.pow(2, autoUpgradeRank - 1))) * (Math.pow(2, autoUpgradeOtherRank - 1)) + (((autoUpgrade2 * 2) * (Math.pow(2, autoUpgradeRank2 - 1))));
         score = (score + autoPower);
         scoreshown.content = (score);
         
