@@ -1,0 +1,609 @@
+//paper - remove this line if you are not using PaperJS
+
+//CODE {
+var PointText;
+var console;
+var Shape;
+var Raster;
+var Point;
+
+//laugh when i mess up something {
+var errorLaugh = new PointText(500, 500);
+errorLaugh.content = "good job numbnut";
+errorLaugh.fontSize = 30;
+//}
+
+// DEFINING VARIABLE {
+
+//essentials {
+//handles points
+var score = 0;
+
+//handles how many points gained by clicking
+var power = 1;
+
+//handles how many points are gained each second
+var autoPower = 0;
+
+//used to count time
+var timer = 0;
+
+//}
+
+//looks {
+//used to make the cookie move
+var x = 0;
+var y = 0.5;
+
+//used for testing purposes
+var test1 = 1;
+var test2 = 1;
+//}
+
+//upgrade variables {
+var infoSquare = new Shape.Rectangle(-500, -500, 160, 100);
+infoSquare.fillColor = "orange";
+var infoText = new PointText(0, 0);
+infoText.content = "";
+infoText.fontSize = 18;
+var infoCost = new PointText(0, 0);
+infoCost.fontSize = 18;
+var upgradeList = [];
+var upgradePrice = [];
+var manualUpdoot1 = 0;
+var autoUpdoot1 = 0;
+var autoUpdoot2 = 0;
+var specialUpdoot1 = 0;
+var randomNumber = 0;
+var specialUpdoot2 = 0;
+//}
+
+// ranks {
+var autoUpgradeRank = 1;
+var autoUpgradeRank2 = 1;
+var clickerUpgradeRank1 = 0;
+var autoUpgradeOtherRank = 1;
+var specialClicker = 1;
+//}
+    
+// images {
+var url = 'data:image/jpeg;base64,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';
+//}
+
+//}
+
+// UPGRADE SCREEN FILLER {
+
+//shown {
+var background = new Shape.Rectangle(0, 0, 10000, 10000);
+background.fillColor = "white";
+
+
+
+
+// first autoupgrade {
+var autoUpgrade1 = 0;
+var autoUpgradePrice = 1;
+      
+var upgradeAutoCover = new Shape.Rectangle(440, 215, 800, 100);
+upgradeAutoCover.fillColor = "black";
+upgradeAutoCover.opacity = 0.2;
+
+var autoText = new PointText(480, 285);
+autoText.content = "cost: " + autoUpgradePrice + " cookies";
+autoText.fontSize = 25;
+
+var screenTextA1 = new PointText(480, 245);
+screenTextA1.content = "upgrades first auto-clicker";
+screenTextA1.fontSize = 25;
+
+var infoText1 = new PointText(780, 285);
+infoText1.content = ("+" + (autoUpgradeRank) + " cookies per second");
+infoText1.fontSize = 25;
+  
+var upgradeAutoOwned = new PointText(820, 245);
+upgradeAutoOwned.content = autoUpgrade1 + " owned";
+upgradeAutoOwned.fontSize = 25;
+
+var upgradeAuto = new Shape.Rectangle(440, 215, 800, 100);
+upgradeAuto.fillColor = "black";
+upgradeAuto.opacity = 0;
+
+//}
+ 
+// first power upgrade {
+var powerUpgrade1 = 0;
+var powerUpgradePrice = 1;
+
+upgradeAutoCover = new Shape.Rectangle(440, 100, 800, 100);
+upgradeAutoCover.fillColor = "black";
+upgradeAutoCover.opacity = 0.2;
+
+var powerText = new PointText(480, 170);
+powerText.content = ("cost: " + powerUpgradePrice + " cookies");
+powerText.fontSize = 25;
+     
+var screenTextM1 = new PointText(480, 130);
+screenTextM1.content = "first clicker upgrade";
+screenTextM1.fontSize = 25;
+
+var upgradePowerOwned = new PointText(820, 130);
+upgradePowerOwned.content = powerUpgrade1 + " owned";
+upgradePowerOwned.fontSize = 25;
+
+var infoText2 = new PointText(780, 170);
+infoText2.content = ("+" + (Math.pow(2, clickerUpgradeRank1)) + " cookies per click");
+infoText2.fontSize = 25;
+
+var infoText3 = new PointText(780, 400);
+infoText3.content = ("+" + (2 * autoUpgradeRank2) + " cookies per second");
+infoText3.fontSize = 25;
+
+var upgradePower = new Shape.Rectangle(440, 100, 800, 100);
+upgradePower.fillColor = "cyan";
+upgradePower.opacity = 0;
+     
+//}
+    
+// second autoupgrade {
+var autoUpgrade2 = 0;
+var autoUpgradePrice2 = 100;
+
+var upgradeAutoCover3 = new Shape.Rectangle(440, 330, 800, 100);
+upgradeAutoCover3.fillColor = "black";
+upgradeAutoCover3.opacity = 0.2;
+      
+var autoText2 = new PointText(480, 400);
+autoText2.content = "cost: " + autoUpgradePrice2 + " cookies";
+autoText2.fontSize = 25;
+      
+var screenTextA2 = new PointText(480, 360);
+screenTextA2.content = "upgrades second auto-clicker";
+screenTextA2.fontSize = 25;
+
+var upgradePowerOwned2 = new PointText(820, 360);
+upgradePowerOwned2.content = autoUpgrade2 + " owned";
+upgradePowerOwned2.fontSize = 25;
+
+var upgradeAuto2 = new Shape.Rectangle(440, 330, 800, 100);
+upgradeAuto2.fillColor = "blue";
+upgradeAuto2.opacity = 0;
+//}
+
+//}
+
+var cookieBorder2 = new Shape.Rectangle(0, 0, 460, 1100);
+cookieBorder2.fillColor = "black";
+
+var cookieBorder = new Shape.Rectangle(0, 0, 450, 450);
+cookieBorder.fillColor = "white";
+
+var cookieBorder3 = new Shape.Rectangle(0, 460, 450, 1000)
+cookieBorder3.fillColor = "white";
+
+var clickerBackup = new Shape.Circle(210, 210, 100, 100);
+clickerBackup.fillColor = "brown";
+
+      
+var shownPowerText = new PointText(250, 25);
+  
+var autoTextInfo = new PointText(10, 25);
+autoTextInfo.content = "cookies per second";
+autoTextInfo.fontSize = 25;
+
+var clickerTextInfo = new PointText(10, 60);
+clickerTextInfo.content = "cookies per click";
+clickerTextInfo.fontSize = 25;
+
+var shownClickerText = new PointText(250, 60);
+shownClickerText.fontSize = 25;
+
+var scoreshown = new PointText(540, 25);
+scoreshown.content = score;
+scoreshown.fontSize = 25;
+
+var upgradeBanner = new PointText(130, 490);
+upgradeBanner.fontSize = 35;
+upgradeBanner.content = ("upgrades:");
+    
+var cookie = new Raster({
+    source: (url),
+    position: new Point(210, 240)
+});
+
+cookie.scale(2);
+
+//}
+    
+//}
+errorLaugh.bringToFront();
+// FUNCTIONS {
+cookie.onLoad = function () {
+    'use strict';
+    clickerBackup.sendToBack();
+    console.log("loaded");
+};
+
+
+// point gain fuctions {
+cookie.onMouseDown = function () {
+    'use strict';
+    score = score + (Math.pow(2, clickerUpgradeRank1) * power) * specialClicker;
+    scoreshown.content = score;
+};
+
+clickerBackup.onMouseDown = function () {
+    'use strict';
+    score = score + (Math.pow(2, clickerUpgradeRank1) * power) * specialClicker;
+    scoreshown.content = score;
+};
+
+      
+function onFrame(event) {
+    'use strict';
+    timer = timer + 1;
+    if (timer === 65) {
+        timer = 0;
+        score = (score + autoPower);
+        console.log(upgradeList);
+        randomNumber = Math.round(Math.random() * 7778);
+        console.log(randomNumber)
+            if (randomNumber === 7777) {
+                if (specialUpdoot1 === 0) {
+                upgradeList.push(3);
+                upgradePrice.push(7777);
+                specialUpdoot1 = 1;
+                console.log("woooo \n woooo \n woooo \n woooo \n woooo \n woooo \n woooo \n woooo \n woooo \n woooo \n woooo \n woooo \n woooo \n woooo \n woooo \n ")
+            }
+        }
+    }
+
+    
+    scoreshown.content = (score);
+    autoPower = (autoUpgrade1 * (Math.pow(2, autoUpgradeRank - 1))) * (Math.pow(2, autoUpgradeOtherRank - 1)) + ((2 * autoUpgrade2) * Math.pow(2, autoUpgradeRank2 - 1));
+    if (autoUpgrade1 >= 10) {
+        if (autoUpdoot1 === 1) {
+            autoUpdoot1 = 2;
+            upgradeList.push(1);
+            upgradePrice.push(2750);
+        }
+    } else if (autoUpgrade1 >= 5) {
+        if (autoUpdoot1 === 0) {
+            autoUpdoot1 = 1;
+            upgradeList.push(1);
+            upgradePrice.push(950);
+        }
+    }
+    
+    if (powerUpgrade1 >= 10) {
+        if (manualUpdoot1 === 1) {
+            manualUpdoot1 = 2;
+            upgradeList.push(0);
+            upgradePrice.push(2250);
+        }
+    } else if (powerUpgrade1 >= 5) {
+        if (manualUpdoot1 === 0) {
+            manualUpdoot1 = 1;
+            upgradeList.push(0);
+            upgradePrice.push(750);
+        }
+    }
+    
+    if (autoUpgrade2 >= 10) {
+        if (autoUpdoot2 === 1) {
+            autoUpdoot2 = 2;
+            upgradeList.push(2);
+            upgradePrice.push(5950);
+        }
+    } else if (autoUpgrade2 >= 5) {
+        if (autoUpdoot2 === 0) {
+            autoUpdoot2 = 1;
+            upgradeList.push(2);
+            upgradePrice.push(2500)
+        }
+    }
+    shownPowerText.content = autoPower;
+    shownPowerText.fontSize = 25;
+    
+    infoText1.content = ("+" + (Math.pow(2, autoUpgradeRank - 1)) * (Math.pow(2, autoUpgradeOtherRank - 1)) + " cookies per second");
+    
+    shownClickerText.content = (Math.pow(2, clickerUpgradeRank1) * power);
+    infoText2.content = ("+" + (Math.pow(2, clickerUpgradeRank1)) + " cookies per click");
+    
+    infoText3.content = ("+" + (Math.pow(2, autoUpgradeRank2)) + " cookies per second");
+    
+    cookie.scale(y);
+    cookie.rotate(y / (8));
+    y = ((Math.cos(x / 200) / 800) + 1.0000);
+    x = (x + Math.PI);
+    
+    if (y <= test1) {
+        test1 = y;
+        console.log(test1);
+    }
+
+    if (y >= test2) {
+        test2 = y;
+        console.log(test2);
+    }
+    upgradePowerOwned.content = powerUpgrade1 + " owned";
+    upgradeAutoOwned.content = autoUpgrade1 + " owned";
+    upgradePowerOwned2.content = autoUpgrade2 + " owned";
+    
+    if (upgradeList[0] === undefined) {
+        rankUpgradeSquareAuto1.sendToBack();
+    } else {
+        rankUpgradeSquareAuto1.bringToFront();
+    }
+    if (upgradeList[1] === undefined) {
+        rankUpgradeSquareAuto2.sendToBack();
+    } else {
+        rankUpgradeSquareAuto2.bringToFront();
+    }
+    if (upgradeList[2] === undefined) {
+        rankUpgradeSquareAuto3.sendToBack();
+    } else {
+        rankUpgradeSquareAuto3.bringToFront();
+    }
+}
+
+
+//}
+//upgrade variables
+
+
+//first rank upgrade {
+
+var rankUpgradeSquareAuto1 = new Shape.Rectangle(90, 515, 30, 30);
+rankUpgradeSquareAuto1.fillColor = "orange";
+
+
+rankUpgradeSquareAuto1.onMouseEnter = function () {
+    'use strict';
+    infoSquare.bringToFront();
+    infoText.bringToFront();
+    infoCost.bringToFront();
+    infoCost.content = upgradePrice[0];
+    if (upgradeList[0] === 0) {
+        infoText.content = "doubles the power \n of clicking";
+    }
+    if (upgradeList[0] === 1) {
+        infoText.content = "doubles the \n power of your \n first auto clicker";
+    }
+    if (upgradeList[0] === 2) {
+        infoText.content = "doubles the \n power of your\n second auto clicker";
+    }
+    if (upgradeList[0] === 3) {
+        infoText.content = "multiplies your \n clicking power \n by 7"
+    }
+    
+    
+    rankUpgradeSquareAuto1.onMouseDown = function () {
+        if (score >= upgradePrice[0]) {
+            score = score - upgradePrice[0];
+            if (upgradeList[0] === 0) {
+                clickerUpgradeRank1 = clickerUpgradeRank1 + 1;
+            } else if (upgradeList[0] === 1) {
+                autoUpgradeOtherRank = autoUpgradeOtherRank + 1;
+            } else if (upgradeList[0] === 2) {
+                autoUpgradeRank2 = autoUpgradeRank2 + 1;
+            } else if (upgradelist[0] === 3) {
+                specialClicker = 7;
+            }
+            upgradePrice.shift();
+            upgradeList.shift();
+            if (upgradeList[0] === 0) {
+                infoText.content = "doubles the power \n of clicking";
+            }
+            if (upgradeList[0] === 1) {
+                infoText.content = "doubles the \n power of your \n first auto clicker";
+            }
+            if (upgradeList[0] === 2) {
+                infoText.content = "doubles the \n power of your\n second auto clicker";
+            }
+            if (upgradeList[0] === 3) {
+                infoText.content = "multiplies your \n clicking power \n by 7"
+            }
+        }
+    };
+};
+
+rankUpgradeSquareAuto1.onMouseLeave = function () {
+    'use strict';
+    infoSquare.sendToBack();
+    infoText.sendToBack();
+    infoCost.sendToBack();
+};
+
+rankUpgradeSquareAuto1.onMouseMove = function (event) {
+    'use strict';
+    infoSquare.position = new Point(event.point.x + 90, event.point.y + 75);
+    infoText.position = new Point(event.point.x + 90, event.point.y + 60);
+    infoCost.position = new Point(event.point.x + 110, event.point.y + 110);
+};
+
+
+
+var rankUpgradeSquareAuto2 = new Shape.Rectangle(150, 515, 30, 30);
+rankUpgradeSquareAuto2.fillColor = "orange";
+
+rankUpgradeSquareAuto2.onMouseMove = function (event) {
+    'use strict';
+    infoSquare.position = new Point(event.point.x + 90, event.point.y + 75);
+    infoText.position = new Point(event.point.x + 90, event.point.y + 60);
+    infoCost.position = new Point(event.point.x + 110, event.point.y + 110);
+};
+
+rankUpgradeSquareAuto2.onMouseEnter = function () {
+    'use strict';
+    infoSquare.bringToFront();
+    infoText.bringToFront();
+    infoCost.bringToFront();
+    infoCost.content = upgradePrice[1];
+    if (upgradeList[1] === 0) {
+        infoText.content = "doubles the power \n of clicking";
+    }
+    if (upgradeList[1] === 1) {
+        infoText.content = "doubles the \n power of your \n first auto clicker";
+    }
+    if (upgradeList[1] === 2) {
+        infoText.content = "doubles the \n power of your\n second auto clicker";
+    } 
+    if (upgradeList[1] === 3) {
+        infoText.content = "multiplies your \n clicking power \n by 7"
+    }
+    rankUpgradeSquareAuto2.onMouseDown = function () {
+        if (score >= upgradePrice[1]) {
+            score = score - upgradePrice[1];
+            if (upgradeList[1] === 0) {
+                clickerUpgradeRank1 = clickerUpgradeRank1 + 1;
+            } else if (upgradeList[1] === 1) {
+                autoUpgradeOtherRank = autoUpgradeOtherRank + 1;
+            } else if (upgradeList[1] === 2) {
+                autoUpgradeRank2 = autoUpgradeRank2 + 1
+            } else if (upgradelist[1] === 3) {
+                specialClicker = 7;
+            }
+            upgradePrice.shift(1);
+            upgradeList.shift(1);
+            if (upgradeList[1] === 0) {
+                infoText.content = "doubles the power \n of clicking";
+            }
+            if (upgradeList[1] === 1) {
+                infoText.content = "doubles the \n power of your \n first auto clicker";
+            }
+            if (upgradeList[1] === 2) {
+                infoText.content = "doubles the \n power of your\n second auto clicker";
+            }
+            if (upgradeList[1] === 3) {
+                infoText.content = "multiplies your \n clicking power \n by 7";
+            }
+        }
+    };
+};
+
+rankUpgradeSquareAuto2.onMouseLeave = function () {
+    'use strict';
+    infoSquare.sendToBack();
+    infoText.sendToBack();
+    infoCost.sendToBack();
+};
+
+var rankUpgradeSquareAuto3 = new Shape.Rectangle(210, 515, 30, 30);
+rankUpgradeSquareAuto3.fillColor = "orange";
+
+rankUpgradeSquareAuto3.onMouseMove = function (event) {
+    'use strict';
+    infoSquare.position = new Point(event.point.x + 90, event.point.y + 75);
+    infoText.position = new Point(event.point.x + 90, event.point.y + 60);
+    infoCost.position = new Point(event.point.x + 110, event.point.y + 110);
+};
+
+rankUpgradeSquareAuto3.onMouseEnter = function () {
+    'use strict';
+    infoSquare.bringToFront();
+    infoText.bringToFront();
+    infoCost.bringToFront();
+    infoCost.content = upgradePrice[2];
+    if (upgradeList[2] === 0) {
+        infoText.content = "doubles the power \n of clicking";
+    }
+    if (upgradeList[2] === 1) {
+        infoText.content = "doubles the \n power of your \n first auto clicker";
+    }
+    if (upgradeList[2] === 2) {
+        infoText.content = "doubles the \n power of your\n second auto clicker";
+    }
+    if (upgradeList[1] === 3) {
+        infoText.content = "multiplies your \n clicking power \n by 7";
+    }
+    
+    rankUpgradeSquareAuto3.onMouseDown = function () {
+        if (score >= upgradePrice[2]) {
+            score = score - upgradePrice[2];
+            if (upgradeList[2] === 0) {
+                clickerUpgradeRank1 = clickerUpgradeRank1 + 1;
+            } else if (upgradeList[2] === 1) {
+                autoUpgradeOtherRank = autoUpgradeOtherRank + 1;
+            } else if (upgradeList[2] === 2) {
+                autoUpgradeRank2 = autoUpgradeRank2 + 1
+            } else if (upgradelist[2] === 3) {
+                specialClicker = 7;
+            }
+            upgradePrice.shift(2);
+            upgradeList.shift(2);
+            if (upgradeList[2] === 0) {
+                infoText.content = "doubles the power \n of clicking";
+            }
+            if (upgradeList[2] === 1) {
+                infoText.content = "doubles the \n power of your \n first auto clicker";
+            }
+            if (upgradeList[2] === 2) {
+                infoText.content = "doubles the \n power of your\n second auto clicker";
+            }
+            if (upgradeList[1] === 3) {
+                infoText.content = "multiplies your \n clicking power \n by 7";
+            }
+        }
+    };
+};
+
+rankUpgradeSquareAuto3.onMouseLeave = function () {
+    'use strict';
+    infoSquare.sendToBack();
+    infoText.sendToBack();
+    infoCost.sendToBack();
+};
+//}    
+
+//}
+    
+// first auto upgrade {
+upgradeAuto.onMouseDown = function () {
+    'use strict';
+    if (score >= autoUpgradePrice) {
+        score = score - autoUpgradePrice;
+        autoUpgrade1 = autoUpgrade1 + 1;
+        autoUpgradePrice = Math.round(Math.pow(autoUpgrade1, 4.1) + 1);
+        autoText.content = "cost: " + autoUpgradePrice + " cookies";
+        scoreshown.content = score;
+    }
+};
+//}
+
+    
+// first manual upgrade {
+upgradePower.onMouseDown = function () {
+    'use strict';
+    if (score >= powerUpgradePrice) {
+        score = score - powerUpgradePrice;
+        power = power + 1;
+        powerUpgrade1 = powerUpgrade1 + 1;
+        powerUpgradePrice = Math.round(Math.pow(powerUpgrade1, 3.2) + 1);
+        powerText.content = ("cost: " + powerUpgradePrice + " cookies");
+        scoreshown.content = score;
+    }
+};
+//}
+
+// second auto upgrade {
+upgradeAuto2.onMouseDown = function () {
+    'use strict';
+    if (score >= autoUpgradePrice2) {
+        score = score - autoUpgradePrice2;
+        autoUpgrade2 = autoUpgrade2 + 1;
+        autoUpgradePrice2 = Math.round(Math.pow(autoUpgrade2, 4.05) + 100);
+        autoText2.content = ("cost: " + autoUpgradePrice2 + " cookies");
+        scoreshown.content = score;
+    }
+};
+
+
+
+
+errorLaugh.sendToBack();
+//}
+//}
+//}
+
+//196
